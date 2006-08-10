@@ -36,7 +36,6 @@ module Err
         end
 
         def textilize
-          logger.debug "I GOT HIT!"
           attribute_names.each { |attr| __send__(attr) }
         end
 
