@@ -12,9 +12,9 @@ module Err
 
           attrs.each do |attr|
             define_method(attr) do
-              textiled[attr.to_s] ||= RedCloth.new(read_attribute(attr), Array(ruled[attr])).to_html
+              textiled[attr.to_s] ||= RedCloth.new(read_attribute(attr), Array(ruled[attr])).to_html if read_attribute(attr)
             end
-            define_method("#{attr}_plain",  proc { strip_redcloth_html(__send__(attr)) } )
+            define_method("#{attr}_plain",  proc { strip_redcloth_html(__send__(attr)) if __send__(attr) } )
             define_method("#{attr}_source", proc { __send__("#{attr}_before_type_cast") } )
           end
 
@@ -51,7 +51,7 @@ module Err
 
       private
         def strip_redcloth_html(html)
-          html.gsub!(html_regexp, '') 
+          html = html.dup.gsub!(html_regexp, '') 
           redcloth_glyphs.each do |(entity, char)|
             html.gsub!(entity, char)
           end

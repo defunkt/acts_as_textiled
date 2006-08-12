@@ -3,6 +3,14 @@ require File.join(File.dirname(__FILE__), 'setup_test')
 class TestTextiled < Test::Unit::TestCase
   fixtures :stories, :authors
 
+  def test_empty_fields
+    story = Story.new
+
+    assert_equal nil, story.description
+    assert_equal nil, story.description_source
+    assert_equal nil, story.description_plain
+  end
+
   def test_desc_is_html
     story = Story.find(1)
 
@@ -10,6 +18,11 @@ class TestTextiled < Test::Unit::TestCase
     desc_textile = '_why announces __Sandbox__'
     desc_plain   = '_why announces Sandbox'
 
+    assert_equal desc_html, story.description
+    assert_equal desc_textile, story.description_source
+    assert_equal desc_plain, story.description_plain
+
+    # make sure we don't overwrite anything - thanks James
     assert_equal desc_html, story.description
     assert_equal desc_textile, story.description_source
     assert_equal desc_plain, story.description_plain
