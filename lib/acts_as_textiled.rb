@@ -51,7 +51,7 @@ module Err
 
       private
         def strip_redcloth_html(html)
-          html = html.dup.gsub!(html_regexp, '') 
+          html = html.dup.gsub(html_regexp, '') 
           redcloth_glyphs.each do |(entity, char)|
             html.gsub!(entity, char)
           end
