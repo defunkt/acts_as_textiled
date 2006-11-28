@@ -7,7 +7,9 @@ module Err
 
       module ClassMethods
         def acts_as_textiled(*attrs)
-          ruled = attrs.last.is_a?(Hash) ? attrs.pop : {}
+          @textiled_attributes = []
+
+          ruled = Hash === attrs.last ? attrs.pop : {}
           attrs += ruled.keys
 
           attrs.each do |attr|
@@ -16,6 +18,7 @@ module Err
             end
             define_method("#{attr}_plain",  proc { strip_redcloth_html(__send__(attr)) if __send__(attr) } )
             define_method("#{attr}_source", proc { __send__("#{attr}_before_type_cast") } )
+            @textiled_attributes << attr
           end
 
           include Err::Acts::Textiled::InstanceMethods
@@ -36,7 +39,7 @@ module Err
         end
 
         def textilize
-          attribute_names.each { |attr| __send__(attr) }
+          Array(@textiled_attributes).each { |attr| __send__(attr) }
         end
 
         def reload
