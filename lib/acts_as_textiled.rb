@@ -8,6 +8,7 @@ module Err
       module ClassMethods
         def acts_as_textiled(*attrs)
           @textiled_attributes = []
+          def textiled_attributes; Array(@textiled_attributes) end
 
           ruled = Hash === attrs.last ? attrs.pop : {}
           attrs += ruled.keys
@@ -39,7 +40,7 @@ module Err
         end
 
         def textilize
-          Array(@textiled_attributes).each { |attr| __send__(attr) }
+          self.class.textiled_attributes.each { |attr| __send__(attr) }
         end
 
         def reload
