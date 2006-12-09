@@ -32,7 +32,7 @@ module Err
         end
 
         def textiled?
-          @is_textiled.nil? ? true : @is_textiled
+          @is_textiled || true
         end
 
         def textiled=(bool)
@@ -55,11 +55,11 @@ module Err
 
       private
         def strip_redcloth_html(html)
-          html = html.dup.gsub(html_regexp, '') 
-          redcloth_glyphs.each do |(entity, char)|
-            html.gsub!(entity, char)
+          returning html.dup.gsub(html_regexp, '') do |h|
+            redcloth_glyphs.each do |(entity, char)|
+              h.gsub!(entity, char)
+            end
           end
-          html
         end
 
         def redcloth_glyphs
