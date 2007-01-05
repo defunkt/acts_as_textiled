@@ -10,6 +10,8 @@ module Err
           @textiled_attributes = []
           def textiled_attributes; Array(@textiled_attributes) end
 
+          @textiled_unicode = "".respond_to? :chars
+
           ruled = Hash === attrs.last ? attrs.pop : {}
           attrs += ruled.keys
 
@@ -57,8 +59,8 @@ module Err
         def strip_redcloth_html(html)
           returning html.dup.gsub(html_regexp, '') do |h|
             redcloth_glyphs.each do |(entity, char)|
-              sub = [:gsub!, entity, char]
-              h.respond_to?(:chars) ? h.chars.send(*sub) : h.send(*sub)
+              sub = [ :gsub!, entity, char ]
+              @textiled_unicode ? h.chars.send(*sub) : h.send(*sub)
             end
           end
         end
