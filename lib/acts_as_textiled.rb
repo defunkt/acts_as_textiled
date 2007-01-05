@@ -57,7 +57,8 @@ module Err
         def strip_redcloth_html(html)
           returning html.dup.gsub(html_regexp, '') do |h|
             redcloth_glyphs.each do |(entity, char)|
-              h.gsub!(entity, char)
+              sub = [:gsub!, entity, char]
+              h.respond_to?(:chars) ? h.chars.send(*sub) : h.send(*sub)
             end
           end
         end
