@@ -21,10 +21,10 @@ You need RedCloth, of course.  And Rails.
   >> story.description
   => "<p>This is <strong>cool</strong>.</p>"
 
-  >> story.description_source
+  >> story.description(:source)
   => "This is *cool*."
 
-  >> story.description_plain
+  >> story.description(:plain)
   => "This is cool."
 
   >> story.description = "I _know_!"
@@ -90,7 +90,7 @@ You'll see the Textile plaintext in the text field.  It Just Works.
 If you're being a bit unconvential, no worries.  You can still get at your 
 raw Textile like so:
 
-  Description: <br/> <%= text_field_tag :description, @story.description_source %>
+  Description: <br/> <%= text_field_tag :description, @story.description(:source) %>
 
 And there's always object.textiled = false, as demo'd above.
 

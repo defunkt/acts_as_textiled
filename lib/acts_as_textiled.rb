@@ -6,21 +6,35 @@ module Err
       end
 
       module ClassMethods
-        def acts_as_textiled(*attrs)
+        def acts_as_textiled(*attributes)
           @textiled_attributes = []
 
-          @textiled_unicode = "".respond_to? :chars
+          @textiled_unicode = String.new.respond_to? :chars
 
-          ruled = Hash === attrs.last ? attrs.pop : {}
-          attrs += ruled.keys
+          ruled = attributes.last.is_a?(Hash) ? attributes.pop : {}
+          attributes += ruled.keys
 
-          attrs.each do |attr|
-            define_method(attr) do
-              textiled[attr.to_s] ||= RedCloth.new(self[attr], Array(ruled[attr])).to_html if self[attr]
+          type_options = %w( plain source )
+
+          attributes.each do |attribute|
+            define_method(attribute) do |*type|
+              type = type.first
+
+              if type.nil? && self[attribute]
+                textiled[attribute.to_s] ||= RedCloth.new(self[attribute], Array(ruled[attribute])).to_html 
+              elsif type.nil? && self[attribute].nil?
+                nil
+              elsif type_options.include?(type.to_s)
+                send("#{attribute}_#{type}")
+              else
+                raise "I don't understand the `#{type}' option.  Try #{type_options.join(' or ')}."
+              end
             end
-            define_method("#{attr}_plain",  proc { strip_redcloth_html(__send__(attr)) if __send__(attr) } )
-            define_method("#{attr}_source", proc { __send__("#{attr}_before_type_cast") } )
-            @textiled_attributes << attr
+
+            define_method("#{attribute}_plain",  proc { strip_redcloth_html(__send__(attribute)) if __send__(attribute) } )
+            define_method("#{attribute}_source", proc { __send__("#{attribute}_before_type_cast") } )
+
+            @textiled_attributes << attribute
           end
 
           include Err::Acts::Textiled::InstanceMethods

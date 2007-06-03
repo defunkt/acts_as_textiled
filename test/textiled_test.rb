@@ -17,19 +17,25 @@ context "An ActiveRecord instance acting as textiled" do
     desc_plain   = '_why announces Sandbox'
 
     story.description.should.equal desc_html
-    #story.description(:source).should.equal desc_textile
-    #story.description(:plain).should.equal desc_plain
+    story.description(:source).should.equal desc_textile
+    story.description(:plain).should.equal desc_plain
 
     story.description_source.should.equal desc_textile
     story.description_plain.should.equal desc_plain
 
     # make sure we don't overwrite anything - thanks James
     story.description.should.equal desc_html
-    #story.description(:source).should.equal desc_textile
-    #story.description(:plain).should.equal desc_plain
+    story.description(:source).should.equal desc_textile
+    story.description(:plain).should.equal desc_plain
 
     story.description_source.should.equal desc_textile
     story.description_plain.should.equal desc_plain
+  end
+
+  specify "should raise when given a non-sensical option" do
+    story = Story.find(1)
+
+    proc { story.description(:cassadaga) }.should.raise
   end
 
   specify "should pick up changes to attributes" do
