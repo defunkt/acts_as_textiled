@@ -8,7 +8,6 @@ module Err
       module ClassMethods
         def acts_as_textiled(*attrs)
           @textiled_attributes = []
-          def textiled_attributes; Array(@textiled_attributes) end
 
           @textiled_unicode = "".respond_to? :chars
 
@@ -17,7 +16,7 @@ module Err
 
           attrs.each do |attr|
             define_method(attr) do
-              textiled[attr.to_s] ||= RedCloth.new(read_attribute(attr), Array(ruled[attr])).to_html if read_attribute(attr)
+              textiled[attr.to_s] ||= RedCloth.new(self[attr], Array(ruled[attr])).to_html if self[attr]
             end
             define_method("#{attr}_plain",  proc { strip_redcloth_html(__send__(attr)) if __send__(attr) } )
             define_method("#{attr}_source", proc { __send__("#{attr}_before_type_cast") } )
@@ -25,6 +24,10 @@ module Err
           end
 
           include Err::Acts::Textiled::InstanceMethods
+        end
+
+        def textiled_attributes
+          Array(@textiled_attributes) 
         end
       end
 
@@ -34,7 +37,7 @@ module Err
         end
 
         def textiled?
-          @is_textiled || true
+          @is_textiled != false
         end
 
         def textiled=(bool)
@@ -52,7 +55,7 @@ module Err
 
         def write_attribute(attr_name, value)
           textiled[attr_name.to_s] = nil
-          super(attr_name, value)
+          super
         end
 
       private
