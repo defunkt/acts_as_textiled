@@ -48,7 +48,7 @@ You need RedCloth, of course.  And Rails.
   >> story.description
   => "<p>I <em>know</em>!</p>"
 
-=== Different Modes
+== Different Modes
 
 RedCloth supports different modes, such as :lite_mode.  To use a mode on 
 a specific attribute simply pass it in as an options hash after any
@@ -75,7 +75,7 @@ in the text boxes / fields as plaintext.  Do you have to change all your views?
 
 Hell no.
 
-=== form_for
+== form_for
 
 Are you using form_for?  If you are, you don't have to change any code at all.
 
@@ -85,7 +85,7 @@ Are you using form_for?  If you are, you don't have to change any code at all.
 
 You'll see the Textile plaintext in the text field.  It Just Works.
 
-=== form tags
+== form tags
 
 If you're being a bit unconvential, no worries.  You can still get at your 
 raw Textile like so:
@@ -117,5 +117,4 @@ won't need to do this.
 
 Enjoy.
 
->> Chris Wanstrath
-=> chris[at]ozmm[dot]org
+* By Chris Wanstrath [ chris[at]ozmm[dot]org ]
