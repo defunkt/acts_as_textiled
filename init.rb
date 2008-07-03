@@ -1,5 +1,5 @@
 begin
-  require 'RedCloth'
+  require 'RedCloth' unless defined? RedCloth
 rescue LoadError
   nil
 end
