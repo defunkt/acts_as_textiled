@@ -21,7 +21,7 @@ module Err
               type = type.first
 
               if type.nil? && self[attribute]
-                textiled[attribute.to_s] ||= RedCloth.new(self[attribute], Array(ruled[attribute])).to_html 
+                textiled[attribute.to_s] ||= RedCloth.new(self[attribute], Array(ruled[attribute])).to_html.to_s.html_safe 
               elsif type.nil? && self[attribute].nil?
                 nil
               elsif type_options.include?(type.to_s)
