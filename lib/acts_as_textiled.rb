@@ -7,7 +7,6 @@ module Err
 
       module ClassMethods
         def acts_as_textiled(*attributes)
-          @textiled_attributes = []
 
           @textiled_unicode = String.new.respond_to? :chars
 
@@ -16,13 +15,25 @@ module Err
 
           type_options = %w( plain source )
 
-          attributes.each do |attribute|
-            define_method(attribute) do |*type|
-              type = type.first
+          textiled_attributes = read_inheritable_attribute(:textiled_attributes) || []
 
-              if type.nil? && self[attribute]
-                textiled[attribute.to_s] ||= RedCloth.new(self[attribute], Array(ruled[attribute])).to_html 
-              elsif type.nil? && self[attribute].nil?
+          attributes.each do |attribute|
+            next if textiled_attributes.include? attribute
+
+            unless instance_methods.include? attribute.to_s
+              define_method(attribute) do |*args|
+                self[attribute]
+              end
+            end
+
+            define_method(attribute.to_s + "_with_textiled") do |*args|
+              type = args.first
+
+              value = __send__(attribute.to_s + "_without_textiled", *args)
+
+              if type.nil? && value
+                textiled[attribute.to_s] ||= RedCloth.new(value, Array(ruled[attribute])).to_html 
+              elsif type.nil? && value.nil?
                 nil
               elsif type_options.include?(type.to_s)
                 send("#{attribute}_#{type}")
@@ -31,17 +42,21 @@ module Err
               end
             end
 
+            alias_method_chain attribute, :textiled
+
             define_method("#{attribute}_plain",  proc { strip_redcloth_html(__send__(attribute)) if __send__(attribute) } )
             define_method("#{attribute}_source", proc { __send__("#{attribute}_before_type_cast") } )
 
-            @textiled_attributes << attribute
+            textiled_attributes << attribute
           end
+
+          write_inheritable_attribute(:textiled_attributes, textiled_attributes)
 
           include Err::Acts::Textiled::InstanceMethods
         end
 
         def textiled_attributes
-          Array(@textiled_attributes) 
+          Array(read_inheritable_attribute(:textiled_attributes)) 
         end
       end
 

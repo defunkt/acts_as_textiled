@@ -60,6 +60,13 @@ class Author < ActiveRecord::Base
 end
 
 class Story < ActiveRecord::Base
+  attr_reader :body_was_called
+  
+  def body(*args)
+    @body_was_called = true
+    self[:body]
+  end
+
   acts_as_textiled :body, :description => :lite_mode
 
   def author
@@ -73,6 +80,18 @@ class StoryWithAfterFind < Story
   def after_find 
     textilize 
   end
+
+  def self.name 
+    Story.name 
+  end
+
+  def author
+    @author ||= Author.find(author_id)
+  end
+end
+
+class StorySubclass < Story 
+  acts_as_textiled :body, :description => :lite_mode
 
   def self.name 
     Story.name 
