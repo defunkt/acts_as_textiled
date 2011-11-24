@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.authors           = [ "Chris Wanstrath" ]
   s.has_rdoc          = false
 
-  s.files             = %w( README Rakefile )
+  s.files             = %w( README.rdoc Rakefile )
   s.files            += Dir.glob("lib/**/*")
   s.files            += Dir.glob("bin/**/*")
   s.files            += Dir.glob("man/**/*")
