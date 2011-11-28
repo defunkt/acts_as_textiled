@@ -2,7 +2,7 @@ $LOAD_PATH.unshift 'lib'
 
 Gem::Specification.new do |s|
   s.name              = "acts_as_textiled"
-  s.version           = "0.3.1"
+  s.version           = "0.3.2"
   s.date              = Time.now.strftime('%Y-%m-%d')
   s.summary           = "Render Textile"
   s.homepage          = "http://github.com/analog-analytics/acts_as_textiled"
