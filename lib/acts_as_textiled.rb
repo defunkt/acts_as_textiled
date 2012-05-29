@@ -100,7 +100,7 @@ module Err
         end
 
         def html_regexp
-          %r{<(?:[^>"']+|"(?:\\.|[^\\"]+)*"|'(?:\\.|[^\\']+)*')*>}xm
+          %r{<.*?>}xm
         end
       end
     end
