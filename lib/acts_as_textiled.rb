@@ -20,7 +20,7 @@ module Err
           attributes.each do |attribute|
             next if textiled_attributes.include? attribute
 
-            unless instance_methods.include? attribute.to_s
+            unless method_defined?(attribute)
               define_method(attribute) do |*args|
                 self[attribute]
               end

@@ -5,10 +5,11 @@ begin
   require 'yaml'
   require 'mocha'
   require 'active_support'
+  gem 'test-unit'
   require 'test/spec'
   require 'RedCloth'
 rescue LoadError
-  puts "acts_as_textiled requires the mocha and test-spec gems to run its tests"
+  puts "acts_as_textiled requires the mocha, test-spec and RedCloth gems to run its tests"
   exit
 end
 
