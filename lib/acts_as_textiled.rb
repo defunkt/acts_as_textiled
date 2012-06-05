@@ -89,7 +89,7 @@ module Err
 
       private
         def strip_redcloth_html(html)
-          returning html.dup.gsub(html_regexp, '') do |h|
+          html.dup.gsub(html_regexp, '').tap do |h|
             redcloth_glyphs.each do |(entity, char)|
               sub = [ :gsub!, entity, char ]
               @textiled_unicode ? h.chars.send(*sub) : h.send(*sub)
